@@ -133,21 +133,34 @@
 <!-- End Cloudflare Web Analytics -->
   
     <style>
-      #like-widget{width:100%;padding:18px 0 28px;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:Arial,sans-serif;background:#fff;box-sizing:border-box;}
-      #like-button{width:72px;height:72px;padding:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;transition:transform .15s ease;}
-      #like-button:hover{transform:scale(1.08);}
-      #like-button:active{transform:scale(.92);}
-      #like-animation{display:block;width:64px;height:64px;pointer-events:none;}
+      #like-widget{width:100%;padding:20px 0 30px;display:flex;flex-direction:column;align-items:center;gap:9px;font-family:Arial,sans-serif;background:#fff;box-sizing:border-box;}
+      #like-button{width:92px;height:92px;padding:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;}
+      #like-button:focus-visible{outline:3px solid #ff9da0;outline-offset:4px;border-radius:50%;}
+      #like-icon{display:block;width:82px;height:82px;overflow:visible;}
+      #like-icon .ring{fill:#fff;stroke:#585858;stroke-width:4;}
+      #like-icon .outline{fill:none;stroke:#585858;stroke-width:5;stroke-linejoin:round;stroke-linecap:round;transition:opacity .16s ease;}
+      #like-icon .filled{fill:#ff5154;opacity:0;transform-origin:50px 51px;transform:scale(.74);transition:opacity .14s ease,transform .32s cubic-bezier(.2,1.55,.45,1);}
+      #like-button.is-liked .outline{opacity:0;}
+      #like-button.is-liked .filled{opacity:1;transform:scale(1);}
+      #like-button.playing #like-icon{animation:like-pop .52s cubic-bezier(.2,1.35,.35,1);}
+      @keyframes like-pop{0%{transform:scale(1)}45%{transform:scale(1.17)}100%{transform:scale(1)}}
       #like-count{font-size:25px;line-height:1;color:#ff5154;font-variant-numeric:tabular-nums;}
     </style>
     <div id="like-widget" aria-label="Like this cooking game">
       <button id="like-button" type="button" aria-label="Like">
-        <object id="like-animation" type="image/svg+xml" data="Youtubel_Like_button_silver.svg" aria-hidden="true"></object>
+        <svg id="like-icon" viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="ring" cx="50" cy="50" r="45"></circle>
+          <g class="outline"><path d="M25 49v29h12V49H25z"></path><path d="M39 49l18-22c4-5 12-1 10 6l-6 16h17c8 0 11 8 6 14l-2 3c1 8-4 12-10 12H39V49z"></path></g>
+          <g class="filled"><path d="M25 49v29h12V49H25z"></path><path d="M39 49l18-22c4-5 12-1 10 6l-6 16h17c8 0 11 8 6 14l-2 3c1 8-4 12-10 12H39V49z"></path></g>
+        </svg>
       </button>
       <span id="like-count">12</span>
     </div>
     <script>
       (function(){var initialCount=12,key='cookieGameLikeCountV1',button=document.getElementById('like-button'),countLabel=document.getElementById('like-count'),animation=document.getElementById('like-animation'),stored=null;try{stored=localStorage.getItem(key);}catch(e){}var count=Number(stored);if(!Number.isFinite(count)||count<initialCount)count=initialCount;function showCount(){countLabel.textContent=count;}function play(){var svg=animation.contentDocument&&animation.contentDocument.getElementById('likeSvg');if(svg)svg.dispatchEvent(new MouseEvent('click',{bubbles:true}));}showCount();button.addEventListener('click',function(){count+=1;try{localStorage.setItem(key,String(count));}catch(e){}showCount();play();});})();
+    </script>
+    <script>
+      (function(){var original=document.getElementById('like-button'),button=original.cloneNode(true),countLabel=document.getElementById('like-count'),initialCount=12,key='cookieGameLikeCountV2',stored=null;original.parentNode.replaceChild(button,original);try{stored=localStorage.getItem(key);}catch(e){}var count=Number(stored);if(!Number.isFinite(count)||count<initialCount)count=initialCount;var liked=count>initialCount;function show(){countLabel.textContent=count;button.classList.toggle('is-liked',liked);}show();window.cookieGameLikeReady=true;button.addEventListener('click',function(){if(!liked){count+=1;liked=true;try{localStorage.setItem(key,String(count));}catch(e){}show();}button.classList.remove('playing');void button.offsetWidth;button.classList.add('playing');setTimeout(function(){button.classList.remove('playing');},560);});})();
     </script>
   </body>
 </html>
