@@ -132,7 +132,7 @@
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "20ecd16a145c4e96af18b90958aff34c"}'></script>
 <!-- End Cloudflare Web Analytics -->
     <style>
-  #like-widget{width:960px;max-width:100%;clear:both;margin:0 auto;padding:20px 0 30px;display:flex;flex-direction:column;align-items:center;gap:9px;font-family:Arial,sans-serif;background:#fff;box-sizing:border-box;}
+  #like-widget{position:absolute;z-index:2;top:650px;left:50%;width:960px;max-width:100%;padding:18px 0 28px;display:flex;flex-direction:column;align-items:center;gap:9px;font-family:Arial,sans-serif;background:#fff;box-sizing:border-box;transform:translateX(-50%);}
   #like-button{width:92px;height:92px;padding:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;position:relative;}
   #like-button:focus-visible{outline:3px solid #585858;outline-offset:4px;border-radius:50%;}
   #like-icon{display:block;width:82px;height:82px;overflow:visible;}
@@ -157,7 +157,7 @@
   <span id="like-count">12</span>
 </div>
 <script>
-(function(){var initialCount=12,key='cookieGameLikeCountV5',button=document.getElementById('like-button'),countLabel=document.getElementById('like-count'),stored=null,liked=false,playing=false;try{stored=localStorage.getItem(key);}catch(e){}var count=Number(stored);if(!Number.isFinite(count)||count<initialCount)count=initialCount;liked=count>initialCount;function show(){countLabel.textContent=count;button.classList.toggle('is-liked',liked);}function activate(){if(playing||liked)return;playing=true;button.classList.add('playing');count+=1;liked=true;try{localStorage.setItem(key,String(count));}catch(e){}show();setTimeout(function(){button.classList.remove('playing');playing=false;},1150);}show();window.cookieGameLikeReady=true;button.addEventListener('click',activate);})();
+(function(){var initialCount=12,key='cookieGameLikeCountV5',widget=document.getElementById('like-widget'),container=document.getElementById('unity-container'),button=document.getElementById('like-button'),countLabel=document.getElementById('like-count'),stored=null,liked=false,playing=false;if(container&&widget)container.appendChild(widget);try{stored=localStorage.getItem(key);}catch(e){}var count=Number(stored);if(!Number.isFinite(count)||count<initialCount)count=initialCount;liked=count>initialCount;function show(){countLabel.textContent=count;button.classList.toggle('is-liked',liked);}function activate(){if(playing)return;count+=1;try{localStorage.setItem(key,String(count));}catch(e){}if(!liked){playing=true;button.classList.add('playing');liked=true;setTimeout(function(){button.classList.remove('playing');playing=false;},1150);}show();}show();window.cookieGameLikeReady=true;button.addEventListener('click',activate);})();
 </script>
   </body>
 </html>
